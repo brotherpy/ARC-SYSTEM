@@ -79,6 +79,8 @@ public class Utilidad extends PlainDocument{
         return numero.doubleValue();
     }
 
+    //Metodo que obtiene el valor double de una Base de datos y lo convierte a 
+    // Sting para ser seteado en un TextField
     public static String formatoValorS(Double valor) {
         DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator(',');

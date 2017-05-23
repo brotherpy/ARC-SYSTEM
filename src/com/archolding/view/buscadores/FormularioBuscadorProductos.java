@@ -17,7 +17,7 @@ import com.archolding.interfaces.InterfaceBuscadorProductoMaestro;
 
 /**
  *
- * @author jorge
+ * @author Jorge Fabio
  */
 public class FormularioBuscadorProductos extends javax.swing.JDialog {
 

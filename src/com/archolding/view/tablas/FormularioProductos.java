@@ -526,7 +526,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         });
 
         jLabel45.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel45.setText("CONFIGURACION DE BALNAZA");
+        jLabel45.setText("CONFIGURACION DE BALANZA");
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel16.setText("Utiliza balanza como");

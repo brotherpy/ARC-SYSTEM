@@ -744,7 +744,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel45">
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" value="CONFIGURACION DE BALNAZA"/>
+                    <Property name="text" type="java.lang.String" value="CONFIGURACION DE BALANZA"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel16">

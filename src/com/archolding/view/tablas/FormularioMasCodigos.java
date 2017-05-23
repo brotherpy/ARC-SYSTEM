@@ -14,7 +14,7 @@ import javax.swing.table.TableColumnModel;
 
 /**
  *
- * @author Renacer
+ * @author Jorge Fabio
  */
 public class FormularioMasCodigos extends javax.swing.JDialog {
 
@@ -32,7 +32,8 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         estadoInicial(true);
         setLocationRelativeTo(this);
         TableColumnModel columnModel = table.getColumnModel();
-        columnModel.getColumn(1).setPreferredWidth(400);
+        columnModel.getColumn(1).setPreferredWidth(80);
+        columnModel.getColumn(2).setPreferredWidth(150);
         recuperarTodo();
 
     }
@@ -62,6 +63,7 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Codigos y Precios Alternativos");
+        setModal(true);
 
         table.setModel(mtDcodigos);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
