@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/arcdb</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">masterkey</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.show_sql">true</property>
+    <mapping class="com.archolding.model.Dcadena"/>
+    <mapping class="com.archolding.model.Dclasificacion"/>
+    <mapping class="com.archolding.model.Dcodigos"/>
+    <mapping class="com.archolding.model.Ddepositos"/>
+    <mapping class="com.archolding.model.Dformapago"/>
+    <mapping class="com.archolding.model.Dmonedas"/>
+    <mapping class="com.archolding.model.Dpdv"/>
+    <mapping class="com.archolding.model.Dproductos"/>
+    <mapping class="com.archolding.model.Drenta"/>
+    <mapping class="com.archolding.model.Fpdvformapago"/>
+    <mapping class="com.archolding.model.Mpdvcabecera"/>
+    <mapping class="com.archolding.model.Mpdvitem"/>
+    <mapping class="com.archolding.model.Mstock"/>
+  </session-factory>
+</hibernate-configuration>
