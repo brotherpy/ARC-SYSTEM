@@ -190,7 +190,7 @@ public class FormMain extends javax.swing.JFrame {
     }
 
     private void mostrarFormularioProducto() {
-        FormularioProductos fp = new FormularioProductos(new javax.swing.JDialog(), true);
+        FormularioProductos fp = new FormularioProductos();
         fp.setVisible(true);
     }
 }

@@ -36,8 +36,10 @@ public class Dproductos implements Serializable {
     private Long id;
     @Column(name = "maestro")
     private Integer maestro;
-    @Column(name = "codbarra")
+    @Column(name = "codbarra", unique = true)
     private String codbarra;
+    @Column(name = "codproveedor")
+    private String codproveedor;
     @Column(name = "descripcion1")
     private String descripcion1;
     @Column(name = "descripcion2")
@@ -132,10 +134,11 @@ public class Dproductos implements Serializable {
         this.id = id;
     }
 
-    public Dproductos(Long id, Integer maestro, String codbarra, String descripcion1, String descripcion2, Integer unidad, Integer cantidad, Double descventa, Double descompra, Double peso, Integer balanza, Integer minimo, Integer maximo, Integer impuesto, Double lucro, Double lucro2, Integer cadena, Double costopromedio, Double costocompra, Double costoneto, Double precioventa, Double precioventa2, Double offline, Double offline2, Date ufmov, Double ucant, String receta, Double porrecibir, boolean afectastock, Integer fleje, String sector, int tecla, Double comision, Double comision2, Double comision3, boolean del) {
+    public Dproductos(Long id, Integer maestro, String codbarra, String codproveedor, String descripcion1, String descripcion2, Integer unidad, Integer cantidad, Double descventa, Double descompra, Double peso, Integer balanza, Integer minimo, Integer maximo, Integer impuesto, Double lucro, Double lucro2, Integer cadena, Double costopromedio, Double costocompra, Double costoneto, Double precioventa, Double precioventa2, Double offline, Double offline2, Date ufmov, Double ucant, String receta, Double porrecibir, boolean afectastock, Integer fleje, String sector, int tecla, Double comision, Double comision2, Double comision3, Date fechaalta, String usuarioalta, Date fechamod, String usuariomod, boolean del, List<Mstock> mstockList, List<Mpdvitem> mpdvitemList, List<Dcodigos> dcodigosList, Dclasificacion clasificacion) {
         this.id = id;
         this.maestro = maestro;
         this.codbarra = codbarra;
+        this.codproveedor = codproveedor;
         this.descripcion1 = descripcion1;
         this.descripcion2 = descripcion2;
         this.unidad = unidad;
@@ -168,7 +171,15 @@ public class Dproductos implements Serializable {
         this.comision = comision;
         this.comision2 = comision2;
         this.comision3 = comision3;
+        this.fechaalta = fechaalta;
+        this.usuarioalta = usuarioalta;
+        this.fechamod = fechamod;
+        this.usuariomod = usuariomod;
         this.del = del;
+        this.mstockList = mstockList;
+        this.mpdvitemList = mpdvitemList;
+        this.dcodigosList = dcodigosList;
+        this.clasificacion = clasificacion;
     }
 
     public Long getId() {
@@ -179,7 +190,7 @@ public class Dproductos implements Serializable {
         this.id = id;
     }
 
-    public int getMaestro() {
+    public Integer getMaestro() {
         return maestro;
     }
 
@@ -193,6 +204,14 @@ public class Dproductos implements Serializable {
 
     public void setCodbarra(String codbarra) {
         this.codbarra = codbarra;
+    }
+
+    public String getCodproveedor() {
+        return codproveedor;
+    }
+
+    public void setCodproveedor(String codproveedor) {
+        this.codproveedor = codproveedor;
     }
 
     public String getDescripcion1() {
@@ -219,7 +238,7 @@ public class Dproductos implements Serializable {
         this.unidad = unidad;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
@@ -297,6 +316,14 @@ public class Dproductos implements Serializable {
 
     public void setLucro2(Double lucro2) {
         this.lucro2 = lucro2;
+    }
+
+    public Integer getCadena() {
+        return cadena;
+    }
+
+    public void setCadena(Integer cadena) {
+        this.cadena = cadena;
     }
 
     public Double getCostopromedio() {
@@ -387,7 +414,7 @@ public class Dproductos implements Serializable {
         this.porrecibir = porrecibir;
     }
 
-    public boolean getAfectastock() {
+    public boolean isAfectastock() {
         return afectastock;
     }
 
@@ -475,7 +502,7 @@ public class Dproductos implements Serializable {
         this.usuariomod = usuariomod;
     }
 
-    public boolean getDel() {
+    public boolean isDel() {
         return del;
     }
 
@@ -505,14 +532,6 @@ public class Dproductos implements Serializable {
 
     public void setDcodigosList(List<Dcodigos> dcodigosList) {
         this.dcodigosList = dcodigosList;
-    }
-
-    public Integer getCadena() {
-        return cadena;
-    }
-
-    public void setCadena(Integer cadena) {
-        this.cadena = cadena;
     }
 
     public Dclasificacion getClasificacion() {

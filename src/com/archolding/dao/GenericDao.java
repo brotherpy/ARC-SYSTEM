@@ -40,7 +40,7 @@ abstract public class GenericDao<T> {
         session.delete(entity);
     }
 
-    public T recuperaPorId(Long id) {
+    public T recuperarPorId(Long id) {
         session.beginTransaction();
         T result = (T) session.get(clase, id);
         close();

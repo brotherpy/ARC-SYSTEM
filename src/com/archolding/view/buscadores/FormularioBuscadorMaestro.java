@@ -11,29 +11,29 @@ import com.archolding.model.table.ModeloTablaBuscadorProducto;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.table.TableColumnModel;
-import com.archolding.interfaces.InterfaceBuscadorProducto;
+import com.archolding.interfaces.InterfaceBuscadorMaestro;
 
 /**
  *
  * @author Jorge Fabio
  */
-public class FormularioBuscadorProductos extends javax.swing.JDialog {
+public class FormularioBuscadorMaestro extends javax.swing.JDialog {
 
     /**
      * Creates new form FormulariosBuscadorProductos
      */
     private Dproductos productos;
     private ProductosDao dao;
-    private ModeloTablaBuscadorProducto mtDproductos;
+    private ModeloTablaBuscadorProducto mtProductos;
     private List<Dproductos> lista;
     private String accion;
-    private InterfaceBuscadorProducto interfaceBuscadorProducto;
+    private InterfaceBuscadorMaestro interfaceBuscadorMaestro;
     
-    public void setInterfaceBuscadorProducto(InterfaceBuscadorProducto interfaceBuscadorProducto) {
-        this.interfaceBuscadorProducto = interfaceBuscadorProducto;
+    public void setInterfaceBuscadorMaestro(InterfaceBuscadorMaestro interfaceBuscadorMaestro) {
+        this.interfaceBuscadorMaestro = interfaceBuscadorMaestro;
     }
 
-    public FormularioBuscadorProductos() {
+    public FormularioBuscadorMaestro() {
         initComponents();
         setLocationRelativeTo(this);
         TableColumnModel columnModel = table.getColumnModel();
@@ -50,7 +50,7 @@ public class FormularioBuscadorProductos extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        mtDproductos = new ModeloTablaBuscadorProducto();
+        mtProductos = new ModeloTablaBuscadorProducto();
         table = new javax.swing.JTable();
         jCheckBox1 = new javax.swing.JCheckBox();
         panelProveedores = new javax.swing.JPanel();
@@ -68,7 +68,7 @@ public class FormularioBuscadorProductos extends javax.swing.JDialog {
         setTitle("Busqueda de Productos");
         setModal(true);
 
-        table.setModel(mtDproductos);
+        table.setModel(mtProductos);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);
@@ -271,7 +271,7 @@ public class FormularioBuscadorProductos extends javax.swing.JDialog {
     private void filtrarProductos() {
         dao = new ProductosDao();
         lista = dao.recuperarPorFiltro(tfDescripcion.getText());
-        mtDproductos.setLista(lista);
+        mtProductos.setLista(lista);
     }
 
     private void seleccionarProducto(int index) {
@@ -279,7 +279,7 @@ public class FormularioBuscadorProductos extends javax.swing.JDialog {
             return;
         }
         Dproductos prod = lista.get(index);
-        interfaceBuscadorProducto.setProducto(prod);
+        interfaceBuscadorMaestro.setMaestro(prod);
         dispose();
     }
 }

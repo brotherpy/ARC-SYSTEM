@@ -56,6 +56,15 @@ public class Mstock implements Serializable {
         this.saldo = saldo;
     }
 
+    public Mstock(Date fecha, double saldo, Ddepositos iddeposito, Dproductos idproducto) {
+        this.fecha = fecha;
+        this.saldo = saldo;
+        this.iddeposito = iddeposito;
+        this.idproducto = idproducto;
+    }
+    
+    
+
     public Long getId() {
         return id;
     }

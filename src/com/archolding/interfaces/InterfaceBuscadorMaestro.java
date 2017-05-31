@@ -11,6 +11,6 @@ import com.archolding.model.Dproductos;
  *
  * @author Jorge Fabio
  */
-public interface InterfaceBuscadorProductoID {
-    public void setProducto(Dproductos producto);
+public interface InterfaceBuscadorMaestro {
+    public void setMaestro(Dproductos producto);
 }

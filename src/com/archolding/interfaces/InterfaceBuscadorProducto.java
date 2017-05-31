@@ -11,6 +11,6 @@ import com.archolding.model.Dproductos;
  *
  * @author Jorge Fabio
  */
-public interface InterfaceBuscadorProductoCodebar {
+public interface InterfaceBuscadorProducto {
     public void setProducto(Dproductos producto);
 }

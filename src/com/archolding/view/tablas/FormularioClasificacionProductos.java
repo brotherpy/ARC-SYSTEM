@@ -30,7 +30,7 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
     private String accion;
     private InterfaceClasificacionProducto interfaceClasificacion;
     
-    public void setInterface(InterfaceClasificacionProducto InterfaceClasificacion) {
+    public void setInterfaceClasificacion(InterfaceClasificacionProducto InterfaceClasificacion) {
         this.interfaceClasificacion = InterfaceClasificacion;
     }
 
