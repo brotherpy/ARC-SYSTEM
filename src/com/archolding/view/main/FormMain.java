@@ -6,6 +6,7 @@
 package com.archolding.view.main;
 
 import com.archolding.util.ConnectionHelper;
+import com.archolding.util.Utilidad;
 import com.archolding.view.tablas.FormularioCadenaPrecios;
 import com.archolding.view.tablas.FormularioClasificacionProductos;
 import com.archolding.view.tablas.FormularioDepositos;
@@ -23,6 +24,9 @@ public class FormMain extends javax.swing.JFrame {
     public FormMain() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
+        Utilidad.buscadorProductosFrame(this);
+        Utilidad.f2ListenerFrame(this);
+        Utilidad.salirConEscapeJFrame(this);
     }
 
     /**
@@ -185,7 +189,7 @@ public class FormMain extends javax.swing.JFrame {
     }
 
     private void mostrarFomularioDepositos() {
-        FormularioDepositos fcp = new FormularioDepositos(this, rootPaneCheckingEnabled);
+        FormularioDepositos fcp = new FormularioDepositos();
         fcp.setVisible(true);
     }
 

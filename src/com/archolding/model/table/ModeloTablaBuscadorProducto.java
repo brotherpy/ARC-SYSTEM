@@ -1,6 +1,7 @@
 package com.archolding.model.table;
 
 import com.archolding.model.Dproductos;
+import com.archolding.util.Utilidad;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -17,12 +18,12 @@ public class ModeloTablaBuscadorProducto extends AbstractTableModel{
 		for (int i = 0; i < productos.size(); i++) {
 			datos[i][0] = productos.get(i).getId();
 			datos[i][1] = productos.get(i).getDescripcion1();
-			datos[i][2] = productos.get(i).getPrecioventa();
-			datos[i][3] = productos.get(i).getPrecioventa2();
-			datos[i][4] = productos.get(i).getCostoneto();
+			datos[i][2] = Utilidad.formatoValorS(productos.get(i).getPrecioventa());
+			datos[i][3] = Utilidad.formatoValorS(productos.get(i).getPrecioventa2());
+			datos[i][4] = Utilidad.formatoValorS(productos.get(i).getCostoneto());
 			datos[i][5] = productos.get(i).getClasificacion().getDescripcion();
 			datos[i][6] = productos.get(i).getUfmov();
-			datos[i][7] = productos.get(i).getUcant();
+			datos[i][7] = Utilidad.formatoValorS(productos.get(i).getUcant());
 
 		}
 		

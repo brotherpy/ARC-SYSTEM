@@ -5,6 +5,10 @@
  */
 package com.archolding.util;
 
+import com.archolding.view.buscadores.FormularioBuscadorProductos;
+import com.archolding.view.tablas.FormularioProductos;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -16,7 +20,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
@@ -26,8 +34,9 @@ import javax.swing.text.PlainDocument;
  *
  * @author Jorge Fabio
  */
-public class Utilidad extends PlainDocument{
-    public void insertString(int offset, String str, AttributeSet atrr)throws BadLocationException{
+public class Utilidad extends PlainDocument {
+
+    public void insertString(int offset, String str, AttributeSet atrr) throws BadLocationException {
         super.insertString(offset, str.toUpperCase(), atrr);
     }
     private static MaskFormatter mascara;
@@ -89,7 +98,7 @@ public class Utilidad extends PlainDocument{
 
         return formato.format(valor);
     }
-    
+
     //Metodo que valida el ingreso de datos en un TextFiel para que solo se 
     //pueda ingresar letras
     public static final void soloLetras(JTextField a) {
@@ -104,7 +113,7 @@ public class Utilidad extends PlainDocument{
             }
         });
     }
-    
+
     //Metodo que valida el ingreso de datos en un TextFiel para que solo se 
     //pueda ingresar numeros
     public static final void soloNumeros(JTextField a) {
@@ -138,4 +147,123 @@ public class Utilidad extends PlainDocument{
     public static void seleccionarContenido(java.awt.event.FocusEvent evt, JTextField textField) {
         textField.selectAll();
     }
+
+    //Metodo para cerrar la ventanas principal
+    public static void salirConEscapeJFrame(final JFrame frame) {
+        ActionListener escListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int opcion = JOptionPane.showConfirmDialog(
+                        null, "Desea salir de " + frame.getTitle() + "?",
+                        "Atencion", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        };
+        frame.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para cerrar las ventanas internas
+    public static void salirConEscapeJDialog(final JDialog dialog) {
+        ActionListener escListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int opcion = JOptionPane.showConfirmDialog(
+                        null, "Desea salir de " + dialog.getTitle() + "?",
+                        "Atencion", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION) {
+                    dialog.dispose();
+                }
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para cerrar los buscadores
+    public static void salirConEscapeBuscador(final JDialog dialog) {
+        ActionListener escListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para abrir buscador de productos en el Main
+    public static void buscadorProductosFrame(final JFrame frame) {
+        ActionListener f5Listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioBuscadorProductos formProd = new FormularioBuscadorProductos();
+                formProd.setVisible(true);
+
+            }
+        };
+        frame.getRootPane().registerKeyboardAction(f5Listener, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para abrir buscador de productos en el los formularios
+    public static void buscadorProductoDialog(final JDialog dialog) {
+        ActionListener f5Listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioBuscadorProductos formProd = new FormularioBuscadorProductos();
+                formProd.setVisible(true);
+
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(f5Listener, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para abrir buscador de productos
+    public static void f2ListenerFrame(final JFrame frame) {
+        ActionListener f2Listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioProductos formProd = new FormularioProductos();
+                formProd.setVisible(true);
+
+            }
+        };
+        frame.getRootPane().registerKeyboardAction(f2Listener, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para limpiar formulario en Productos
+    public static void limpiarDialog(final JDialog dialog) {
+        ActionListener f5Listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioProductos.btnLimpiar.doClick();
+
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(f5Listener, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
+    //Metodo para guardar en formulario Productos
+    public static void guardarDialog(final JDialog dialog) {
+        ActionListener listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioProductos.btnGuardar.doClick();
+
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+    
+        //Metodo para cargar mas codigos en formulario Productos
+    public static void masCodigosDialog(final JDialog dialog) {
+        ActionListener listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormularioProductos.btnMasCodigos.doClick();
+
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
 }

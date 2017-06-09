@@ -6,8 +6,11 @@
 package com.archolding.view.tablas;
 
 import com.archolding.dao.MasCodigosDao;
+import com.archolding.dao.ProductosDao;
 import com.archolding.model.Dcodigos;
+import com.archolding.model.Dproductos;
 import com.archolding.model.table.ModeloTablaMasCodigos;
+import com.archolding.util.Utilidad;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumnModel;
@@ -26,6 +29,8 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
     private ModeloTablaMasCodigos mtDcodigos;
     private List<Dcodigos> lista;
     private String accion;
+    private ProductosDao prodDao;
+    private Dproductos prod;
 
     public FormularioMasCodigos() {
         initComponents();
@@ -34,8 +39,7 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         TableColumnModel columnModel = table.getColumnModel();
         columnModel.getColumn(1).setPreferredWidth(80);
         columnModel.getColumn(2).setPreferredWidth(150);
-        recuperarTodo();
-
+        Utilidad.salirConEscapeBuscador(this);
     }
 
     /**
@@ -56,10 +60,11 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         tfCodigoBarra = new javax.swing.JTextField();
         tfCantidad = new javax.swing.JTextField();
         tfPrecio = new javax.swing.JTextField();
-        btnNuevo = new javax.swing.JButton();
-        btnGuardar = new javax.swing.JButton();
+        btnIncluir = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Codigos y Precios Alternativos");
@@ -87,6 +92,11 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
                 tfCodigoBarraFocusLost(evt);
             }
         });
+        tfCodigoBarra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfCodigoBarraKeyPressed(evt);
+            }
+        });
 
         tfCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -94,6 +104,11 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfCantidadFocusLost(evt);
+            }
+        });
+        tfCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfCantidadKeyPressed(evt);
             }
         });
 
@@ -105,28 +120,21 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
                 tfPrecioFocusLost(evt);
             }
         });
-
-        btnNuevo.setText("Nuevo");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-        btnNuevo.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnNuevoKeyPressed(evt);
+                tfPrecioKeyPressed(evt);
             }
         });
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnIncluir.setText("Incluir");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnIncluirActionPerformed(evt);
             }
         });
-        btnGuardar.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnIncluir.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnGuardarKeyPressed(evt);
+                btnIncluirKeyPressed(evt);
             }
         });
 
@@ -142,17 +150,23 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
             }
         });
 
-        btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnSalirActionPerformed(evt);
             }
         });
-        btnCancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnSalir.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnCancelarKeyPressed(evt);
+                btnSalirKeyPressed(evt);
             }
         });
+
+        jTextField1.setEditable(false);
+        jTextField1.setEnabled(false);
+
+        jTextField2.setEditable(false);
+        jTextField2.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,18 +174,15 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(tfCodigoBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -186,14 +197,26 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(71, 71, 71))
-                            .addComponent(tfPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(btnIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -204,28 +227,28 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
                     .addComponent(tfCodigoBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevo)
-                    .addComponent(btnGuardar)
+                    .addComponent(btnIncluir)
                     .addComponent(btnEliminar)
-                    .addComponent(btnCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSalir))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfCodigoBarraFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCodigoBarraFocusGained
-        // TODO add your handling code here:
+        recuperarTodo();
+        Utilidad.seleccionarContenido(evt, tfCodigoBarra);
     }//GEN-LAST:event_tfCodigoBarraFocusGained
 
     private void tfCantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCantidadFocusGained
-        // TODO add your handling code here:
+        Utilidad.seleccionarContenido(evt, tfCantidad);
     }//GEN-LAST:event_tfCantidadFocusGained
 
     private void tfPrecioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfPrecioFocusGained
-        // TODO add your handling code here:
+        Utilidad.seleccionarContenido(evt, tfPrecio);
     }//GEN-LAST:event_tfPrecioFocusGained
 
     private void tfCodigoBarraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCodigoBarraFocusLost
@@ -240,37 +263,29 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfPrecioFocusLost
 
-    private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNuevoKeyPressed
-
-    private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGuardarKeyPressed
+    private void btnIncluirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnIncluirKeyPressed
+        Utilidad.hacerClicConEnter(evt, btnIncluir);
+    }//GEN-LAST:event_btnIncluirKeyPressed
 
     private void btnEliminarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnEliminarKeyPressed
-        // TODO add your handling code here:
+        Utilidad.hacerClicConEnter(evt, btnEliminar);
     }//GEN-LAST:event_btnEliminarKeyPressed
 
-    private void btnCancelarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnCancelarKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelarKeyPressed
+    private void btnSalirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSalirKeyPressed
+        dispose();
+    }//GEN-LAST:event_btnSalirKeyPressed
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        nuevo();
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        verificarCodigoBarra(tfCodigoBarra.getText());
+    }//GEN-LAST:event_btnIncluirActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         eliminar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        cancelar();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         if (evt.getClickCount() == 2) {
@@ -278,15 +293,28 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tableMouseClicked
 
+    private void tfCodigoBarraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCodigoBarraKeyPressed
+        Utilidad.moverConEnter(evt, tfCantidad);
+    }//GEN-LAST:event_tfCodigoBarraKeyPressed
+
+    private void tfCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCantidadKeyPressed
+        Utilidad.moverConEnter(evt, tfPrecio);
+    }//GEN-LAST:event_tfCantidadKeyPressed
+
+    private void tfPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPrecioKeyPressed
+        Utilidad.moverConEnter(evt, btnIncluir);
+    }//GEN-LAST:event_tfPrecioKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnIncluir;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    public static javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextField jTextField2;
     private javax.swing.JTable table;
     private javax.swing.JTextField tfCantidad;
     private javax.swing.JTextField tfCodigoBarra;
@@ -295,7 +323,7 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
 
     private void recuperarTodo() {
         dao = new MasCodigosDao();
-        lista = dao.recuperarTodo();
+        lista = dao.recuperarMasCodigos(Long.parseLong(jTextField1.getText()));
         mtDcodigos.setLista(lista);
     }
 
@@ -308,7 +336,6 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
         tfCodigoBarra.setText(codigos.getCodigobarra() + "");
         tfCantidad.setText(codigos.getCantidad() + "");
         tfPrecio.setText(codigos.getPrecio() + "");
-        modificar();
     }
 
     private void seleccionarProducto(int index) {
@@ -316,7 +343,6 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
             return;
         }
         Dcodigos cadena = lista.get(index);
-        //interfaz.setProducto(producto);
         dispose();
     }
 
@@ -349,64 +375,73 @@ public class FormularioMasCodigos extends javax.swing.JDialog {
     //Estado inicial = false (Los campos estan habilitados)
     private void estadoInicial(Boolean b) {
         tfCodigoBarra.requestFocus();
-        btnNuevo.setEnabled(b);
+        btnIncluir.setEnabled(b);
         btnEliminar.setEnabled(b);
-        btnGuardar.setEnabled(!b);
-        btnCancelar.setEnabled(!b);
+        btnSalir.setEnabled(!b);
 
         table.clearSelection();
         table.setEnabled(b);
     }
-    //Vaciar campos
 
+    //Vaciar campos
     private void vaciarCampos() {
         tfCodigoBarra.requestFocus();
         tfCodigoBarra.setText("");
     }
 
-    private void nuevo() {
-        accion = "NUEVO";
-        estadoInicial(false);
-        vaciarCampos();
-    }
-
-    private void modificar() {
-        accion = "MODIFICAR";
-        estadoInicial(false);
-    }
-
-    private void cancelar() {
-        estadoInicial(true);
-        vaciarCampos();
-    }
-
-    private void guardar() {
-
-        if (accion.equals("NUEVO")) {
-            codigos = new Dcodigos();
+    //Validar antes de grabar
+    private boolean validar() {
+        boolean validar = false;
+        if (tfCodigoBarra.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Codigo");
+            tfCodigoBarra.requestFocus();
+        } else if (tfCantidad.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una Cantidad");
+            tfCantidad.requestFocus();
+        } else if (tfPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un precio");
+            tfPrecio.requestFocus();
+        } else {
+            validar = true;
         }
+        return validar;
+    }
 
-//        codigos.setIdmaestro(1);
-        codigos.setCodigobarra(tfCodigoBarra.getText());
-        codigos.setCantidad(Integer.parseInt(tfCantidad.getText()));
-        codigos.setPrecio(Integer.parseInt(tfPrecio.getText()));
+    private void verificarCodigoBarra(String Barra){
+        prodDao = new ProductosDao();
+        prod = prodDao.recuperarPorCodigoBarra(Barra);
+        if(prod!=null){
+            JOptionPane.showMessageDialog(null, "El codigo de barras "+Barra+" ya esta utilizado por el id: "+ prod.getId());
+            tfCodigoBarra.requestFocus();
+        }else{
+            guardar();
+        }
+    }
+    private void guardar() {
+        if (validar()) {
+            prodDao = new ProductosDao();
+            prod = prodDao.recuperarPorId(Long.parseLong(jTextField1.getText()));
+            codigos = new Dcodigos();
+            codigos.setIdmaestro(prod);
+            codigos.setCodigobarra(tfCodigoBarra.getText());
+            codigos.setCantidad(Integer.parseInt(tfCantidad.getText()));
+            codigos.setPrecio(Integer.parseInt(tfPrecio.getText()));
 
-        dao = new MasCodigosDao();
+            dao = new MasCodigosDao();
 
-        try {
-            if (accion.equals("NUEVO")) {
+            try {
                 dao.insertar(codigos);
-            } else {
-                dao.actualizar(codigos);
+                dao.commit();
+                estadoInicial(true);
+                vaciarCampos();
+                recuperarTodo();
+            } catch (Exception e) {
+                e.printStackTrace();
+                dao.rollback();
+                JOptionPane.showMessageDialog(null, "El codigo "+tfCodigoBarra+"ya fue utilizado"
+                        + "\ncomo codigo alternativo");
+                tfCodigoBarra.requestFocus();
             }
-            dao.commit();
-            estadoInicial(true);
-            vaciarCampos();
-            recuperarTodo();
-        } catch (Exception e) {
-            e.printStackTrace();
-            dao.rollback();
-            JOptionPane.showMessageDialog(null, "Se produjo un error al guardar los datos");
         }
     }
 }

@@ -38,9 +38,10 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(this);
         estadoInicial(true);
-        TableColumnModel columnModel = table.getColumnModel();
+        TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(1).setPreferredWidth(400);
         recuperarTodo();
+        Utilidad.salirConEscapeBuscador(this);
 
         //solo mayusculas
         tfDescripcion.setDocument(new Utilidad());
@@ -57,7 +58,7 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         mtDclasificacion = new ModeloTablaClasificacionProductos();
-        table = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         tfDescripcion = new javax.swing.JTextField();
         btnNuevo = new javax.swing.JButton();
@@ -71,13 +72,13 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
         setTitle("Clasificacion de Productos");
         setModal(true);
 
-        table.setModel(mtDclasificacion);
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabla.setModel(mtDclasificacion);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
+                tablaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(table);
+        jScrollPane1.setViewportView(tabla);
 
         jLabel1.setText("Descripcion");
 
@@ -117,6 +118,7 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
         });
 
         btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.setEnabled(false);
         btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSeleccionarActionPerformed(evt);
@@ -195,14 +197,14 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-        seleccionarClasificacion(table.getSelectedRow());
+        seleccionarClasificacion(tabla.getSelectedRow());
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         if (evt.getClickCount() == 2) {
-            seleccionarObjeto(table.getSelectedRow());
+            seleccionarObjeto(tabla.getSelectedRow());
         }
-    }//GEN-LAST:event_tableMouseClicked
+    }//GEN-LAST:event_tablaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -214,10 +216,10 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnSeleccionar;
+    public static javax.swing.JButton btnSeleccionar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private javax.swing.JTable tabla;
     private javax.swing.JTextField tfDescripcion;
     // End of variables declaration//GEN-END:variables
     private void recuperarTodo() {
@@ -252,7 +254,7 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
     }
 
     private void eliminar() {
-        int index = table.getSelectedRow();
+        int index = tabla.getSelectedRow();
         if (index < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un registro");
             return;
@@ -286,8 +288,8 @@ public class FormularioClasificacionProductos extends javax.swing.JDialog {
         btnGuardar.setEnabled(!b);
         btnCancelar.setEnabled(!b);
 
-        table.clearSelection();
-        table.setEnabled(b);
+        tabla.clearSelection();
+        tabla.setEnabled(b);
     }
     
     private void vaciarCampos() {

@@ -8,6 +8,7 @@ package com.archolding.view.tablas;
 import com.archolding.model.table.ModeloTablaDepositos;
 import com.archolding.dao.DepositosDao;
 import com.archolding.model.Ddepositos;
+import com.archolding.util.Utilidad;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumnModel;
@@ -16,7 +17,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Jorge Fabio
  */
-public class FormularioDepositos extends java.awt.Dialog {
+public class FormularioDepositos extends javax.swing.JDialog {
 
     /**
      * Creates new form FormularioDdepositos
@@ -27,14 +28,15 @@ public class FormularioDepositos extends java.awt.Dialog {
     private List<Ddepositos> lista;
     private String accion;
 
-    public FormularioDepositos(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public FormularioDepositos() {
         initComponents();
         setLocationRelativeTo(this);
         estadoInicial(true);
-        TableColumnModel columnModel = table.getColumnModel();
+        TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(1).setPreferredWidth(400);
         recuperarTodo();
+        tfDescripcion.setDocument(new Utilidad());
+        Utilidad.salirConEscapeBuscador(this);
     }
 
     /**
@@ -53,11 +55,12 @@ public class FormularioDepositos extends java.awt.Dialog {
         btnGuardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         mtDdepositos = new ModeloTablaDepositos();
-        table = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnBuscar1 = new javax.swing.JButton();
 
         setTitle("Depositos");
+        setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -99,25 +102,26 @@ public class FormularioDepositos extends java.awt.Dialog {
             }
         });
 
-        table.setModel(mtDdepositos);
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabla.setModel(mtDdepositos);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
+                tablaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(table);
+        jScrollPane1.setViewportView(tabla);
 
         jLabel1.setText("Descripcion:");
 
         btnBuscar1.setText("Seleccionar");
+        btnBuscar1.setEnabled(false);
         btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscar1ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -193,14 +197,14 @@ public class FormularioDepositos extends java.awt.Dialog {
         guardar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         if (evt.getClickCount() == 2) {
-            seleccionarObjeto(table.getSelectedRow());
+            seleccionarObjeto(tabla.getSelectedRow());
         }
-    }//GEN-LAST:event_tableMouseClicked
+    }//GEN-LAST:event_tablaMouseClicked
 
     private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        seleccionarProducto(table.getSelectedRow());
+        seleccionarProducto(tabla.getSelectedRow());
     }//GEN-LAST:event_btnBuscar1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -212,7 +216,7 @@ public class FormularioDepositos extends java.awt.Dialog {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private javax.swing.JTable tabla;
     private javax.swing.JTextField tfDescripcion;
     // End of variables declaration//GEN-END:variables
 
@@ -248,7 +252,7 @@ public class FormularioDepositos extends java.awt.Dialog {
     }
 
     private void eliminar() {
-        int index = table.getSelectedRow();
+        int index = tabla.getSelectedRow();
         if (index < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un registro");
             return;
@@ -282,8 +286,8 @@ public class FormularioDepositos extends java.awt.Dialog {
         btnGuardar.setEnabled(!b);
         btnCancelar.setEnabled(!b);
 
-        table.clearSelection();
-        table.setEnabled(b);
+        tabla.clearSelection();
+        tabla.setEnabled(b);
     }
     //Vaciar campos
 

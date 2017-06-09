@@ -9,27 +9,28 @@ import com.archolding.dao.CadenaPreciosDao;
 import com.archolding.dao.ClasificacionProductosDao;
 import com.archolding.dao.MovimientoStockDao;
 import com.archolding.dao.ProductosDao;
-import com.archolding.interfaces.InterfaceBuscadorMaestro;
 import com.archolding.model.Dclasificacion;
 import com.archolding.model.Dproductos;
-import com.archolding.model.table.ModeloTablaMasCodigos;
 import com.archolding.util.Utilidad;
 import com.archolding.view.buscadores.FormularioBuscadorProductos;
-import java.util.List;
 import javax.swing.JOptionPane;
 import com.archolding.interfaces.InterfaceClasificacionProducto;
 import com.archolding.interfaces.InterfaceBuscadorProducto;
 import com.archolding.model.Dcadena;
 import com.archolding.model.Mstock;
-import com.archolding.view.buscadores.FormularioBuscadorMaestro;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
+import java.awt.event.KeyEvent;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Vector;
 
 /**
  *
  * @author Jorge Fabio
  */
-public class FormularioProductos extends javax.swing.JDialog implements InterfaceBuscadorMaestro, InterfaceBuscadorProducto, InterfaceClasificacionProducto {
+public class FormularioProductos extends javax.swing.JDialog implements InterfaceBuscadorProducto, InterfaceClasificacionProducto {
 
     /**
      * Creates new form FormularioProductosNuevoJdialog
@@ -40,16 +41,20 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     private CadenaPreciosDao cadDao;
     private ClasificacionProductosDao clasDao;
     private ProductosDao prodDao;
-    private ModeloTablaMasCodigos mtDproductos;
-    private List<Dproductos> lista;
     private String accion;
-    private int maestro;
     private MovimientoStockDao stockDao;
     private Mstock stock;
+    private static int bandera;
 
     public FormularioProductos() {
         initComponents();
         setLocationRelativeTo(this);
+
+        //Cerrar ventana con Escape
+        Utilidad.guardarDialog(this);
+        Utilidad.masCodigosDialog(this);
+        Utilidad.limpiarDialog(this);
+        Utilidad.salirConEscapeJDialog(this);
 
         estadoInicial(true);
         tfCodigoBarras.requestFocus();
@@ -76,6 +81,42 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         Utilidad.soloNumeros(tfLucroUnidad);
         Utilidad.soloNumeros(tfLucroCaja);
         Utilidad.soloNumeros(tfBalanzaTecla);
+
+        //Establecer FocusTravesalPolicy
+        Vector<Component> order = new Vector<Component>(4);
+        order.add(tfCodigoBarras);
+        order.add(tfIdProducto);
+        order.add(tfMaestroProducto);
+        order.add(tfCodigoProveedor);
+        order.add(tfDescripcion1);
+        order.add(tfDescripcion2);
+        order.add(cbUnidadMedida);
+        order.add(tfCantidadPorCaja);
+        order.add(tfClasificCodigo);
+        order.add(tfDescVenta);
+        order.add(tfDescCompra);
+        order.add(tfPesoProducto);
+        order.add(tfCadenaCodigo);
+        order.add(tfComision1);
+        order.add(tfComision2);
+        order.add(tfComision3);
+        order.add(tfStockMinimo);
+        order.add(tfStockMaximo);
+        order.add(tfLucroUnidad);
+        order.add(tfLucroCaja);
+        order.add(cbBalanzaPesableSN);
+        order.add(tfBalanzaSector);
+        order.add(tfBalanzaTecla);
+        order.add(cbImprimeFleje);
+        order.add(cbAfectaStock);
+        order.add(cbImpuesto);
+        order.add(btnGuardar);
+        order.add(btnEliminar);
+        order.add(btnMasCodigos);
+        order.add(btnLimpiar);
+        order.add(btnSalir);
+        FormularioProductos.MyOFocusTraversalPolicy newPolicy = new FormularioProductos.MyOFocusTraversalPolicy(order);
+        this.setFocusTraversalPolicy(newPolicy);
     }
 
     /**
@@ -592,7 +633,6 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
 
         jLabel27.setText("Tecla");
 
-        tfBalanzaSector.setText("GENERAL");
         tfBalanzaSector.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tfBalanzaSectorFocusGained(evt);
@@ -1193,9 +1233,9 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
                                         .addComponent(tfInformeStock, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(panelInformacionProductoLayout.createSequentialGroup()
-                                .addComponent(tfInformePrecioVtaCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tfInformePrecioVtaUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(tfInformePrecioVtaUnit, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                .addComponent(tfInformePrecioVtaCaja, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                                 .addGap(36, 36, 36))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInformacionProductoLayout.createSequentialGroup()
                                 .addGroup(panelInformacionProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1215,9 +1255,8 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
                                         .addGap(18, 18, 18)
                                         .addGroup(panelInformacionProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jLabel47, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(tfInformeLucroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(tfInformeLucroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)))
                         .addGroup(panelInformacionProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1282,8 +1321,8 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
                             .addComponent(jLabel34))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelInformacionProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfInformePrecioVtaCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfInformePrecioVtaUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfInformePrecioVtaUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfInformePrecioVtaCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1438,8 +1477,10 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (accion.equals("NUEVO")) {
-            guardar();
-        } else {
+            if (validar()) {
+                guardar();
+            }
+        } else if (validar()) {
             actualizar();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -1450,6 +1491,8 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
 
     private void btnMasCodigosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasCodigosActionPerformed
         FormularioMasCodigos fmc = new FormularioMasCodigos();
+        FormularioMasCodigos.jTextField1.setText(tfIdProducto.getText());
+        FormularioMasCodigos.jTextField2.setText(tfDescripcion1.getText());
         fmc.setVisible(true);
     }//GEN-LAST:event_btnMasCodigosActionPerformed
 
@@ -1463,14 +1506,17 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
 
     private void btnBuscarProductoCodBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoCodBarActionPerformed
         abrirBuscadorProducto();
+        bandera = 0;
     }//GEN-LAST:event_btnBuscarProductoCodBarActionPerformed
 
     private void btnBuscarProductoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoIdActionPerformed
         abrirBuscadorProducto();
+        bandera = 0;
     }//GEN-LAST:event_btnBuscarProductoIdActionPerformed
 
     private void btnBuscarProductoMaestroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoMaestroActionPerformed
-        abrirBuscadorMaestro();
+        abrirBuscadorProducto();
+        bandera = 1;
     }//GEN-LAST:event_btnBuscarProductoMaestroActionPerformed
 
     private void btnBuscarClasificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClasificacionActionPerformed
@@ -1482,14 +1528,25 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_btnBuscarCadenaPreciosActionPerformed
 
     private void tfCodigoBarrasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCodigoBarrasKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            bandera = 0;
+            abrirBuscadorProducto();
+        }
         Utilidad.moverConEnter(evt, tfIdProducto);
     }//GEN-LAST:event_tfCodigoBarrasKeyPressed
 
     private void tfIdProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfIdProductoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            abrirBuscadorProducto();
+        }
         Utilidad.moverConEnter(evt, tfMaestroProducto);
     }//GEN-LAST:event_tfIdProductoKeyPressed
 
     private void tfMaestroProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfMaestroProductoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            bandera = 1;
+            abrirBuscadorProducto();
+        }
         Utilidad.moverConEnter(evt, tfCodigoProveedor);
     }//GEN-LAST:event_tfMaestroProductoKeyPressed
 
@@ -1514,6 +1571,9 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfCantidadPorCajaKeyPressed
 
     private void tfClasificCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfClasificCodigoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            abrirBuscadorClasificacion();
+        }
         Utilidad.moverConEnter(evt, tfDescVenta);
     }//GEN-LAST:event_tfClasificCodigoKeyPressed
 
@@ -1526,28 +1586,15 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfDescCompraKeyPressed
 
     private void tfPesoProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPesoProductoKeyPressed
-        Utilidad.moverConEnter(evt, tfStockMinimo);
+        Utilidad.moverConEnter(evt, tfCadenaCodigo);
     }//GEN-LAST:event_tfPesoProductoKeyPressed
 
-    private void tfStockMinimoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfStockMinimoKeyPressed
-        Utilidad.moverConEnter(evt, tfStockMaximo);
-    }//GEN-LAST:event_tfStockMinimoKeyPressed
-
-    private void tfStockMaximoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfStockMaximoKeyPressed
-        Utilidad.moverConEnter(evt, tfCadenaCodigo);
-    }//GEN-LAST:event_tfStockMaximoKeyPressed
-
     private void tfCadenaCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCadenaCodigoKeyPressed
-        Utilidad.moverConEnter(evt, tfLucroUnidad);
-    }//GEN-LAST:event_tfCadenaCodigoKeyPressed
-
-    private void tfLucroUnidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLucroUnidadKeyPressed
-        Utilidad.moverConEnter(evt, tfLucroCaja);
-    }//GEN-LAST:event_tfLucroUnidadKeyPressed
-
-    private void tfLucroCajaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLucroCajaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            abrirBuscadorCadenaPrecios();
+        }
         Utilidad.moverConEnter(evt, tfComision1);
-    }//GEN-LAST:event_tfLucroCajaKeyPressed
+    }//GEN-LAST:event_tfCadenaCodigoKeyPressed
 
     private void tfComision1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfComision1KeyPressed
         Utilidad.moverConEnter(evt, tfComision2);
@@ -1558,8 +1605,24 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfComision2KeyPressed
 
     private void tfComision3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfComision3KeyPressed
-        Utilidad.moverConEnter(evt, cbBalanzaPesableSN);
+        Utilidad.moverConEnter(evt, tfStockMinimo);
     }//GEN-LAST:event_tfComision3KeyPressed
+
+    private void tfStockMinimoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfStockMinimoKeyPressed
+        Utilidad.moverConEnter(evt, tfStockMaximo);
+    }//GEN-LAST:event_tfStockMinimoKeyPressed
+
+    private void tfStockMaximoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfStockMaximoKeyPressed
+        Utilidad.moverConEnter(evt, tfLucroUnidad);
+    }//GEN-LAST:event_tfStockMaximoKeyPressed
+
+    private void tfLucroUnidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLucroUnidadKeyPressed
+        Utilidad.moverConEnter(evt, tfLucroCaja);
+    }//GEN-LAST:event_tfLucroUnidadKeyPressed
+
+    private void tfLucroCajaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLucroCajaKeyPressed
+        Utilidad.moverConEnter(evt, cbBalanzaPesableSN);
+    }//GEN-LAST:event_tfLucroCajaKeyPressed
 
     private void cbBalanzaPesableSNKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbBalanzaPesableSNKeyPressed
         Utilidad.moverConEnter(evt, tfBalanzaSector);
@@ -1582,7 +1645,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_cbAfectaStockKeyPressed
 
     private void cbImpuestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbImpuestoKeyPressed
-        Utilidad.moverConEnter(evt, btnNuevo);
+        Utilidad.moverConEnter(evt, btnGuardar);
     }//GEN-LAST:event_cbImpuestoKeyPressed
 
     private void btnNuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevoKeyPressed
@@ -1639,7 +1702,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         if (tfIdProducto.getText().isEmpty()) {
             nuevo();
             if (tfCodigoBarras.getText().isEmpty()) {
-                generarCodigoBarra();
+                generateEan8(tfIdProducto.getText());
             }
         } else {
             recuperarProducto(Long.parseLong(tfIdProducto.getText()));
@@ -1647,14 +1710,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfIdProductoFocusLost
 
     private void tfMaestroProductoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfMaestroProductoFocusLost
-        if (tfMaestroProducto.getText().isEmpty()) {
-            tfMaestroProducto.setText(tfIdProducto.getText());
-        } else if (!tfMaestroProducto.getText().equals(tfIdProducto.getText())) {
-            int opcion = JOptionPane.showConfirmDialog(this, "El identificador y el maestro no son iguales, desea continuar", "Atención", JOptionPane.YES_NO_OPTION);
-            if (opcion != JOptionPane.OK_OPTION) {
-                tfMaestroProducto.setText(tfIdProducto.getText());
-            }
-        }
+        verificarMaestro();
     }//GEN-LAST:event_tfMaestroProductoFocusLost
 
     private void tfCodigoProveedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCodigoProveedorFocusLost
@@ -1664,6 +1720,11 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfCodigoProveedorFocusLost
 
     private void tfDescripcion1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfDescripcion1FocusLost
+
+        if (tfDescripcion1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una descipcion");
+            tfDescripcion1.requestFocus();
+        }
         if (tfDescripcion2.getText().isEmpty()) {
             tfDescripcion2.setText(tfDescripcion1.getText());
         }
@@ -1705,7 +1766,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     }//GEN-LAST:event_tfPesoProductoFocusLost
 
     private void tfCadenaCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfCadenaCodigoFocusLost
-
+        recuperarCadena(Long.parseLong(tfClasificCodigo.getText()));
     }//GEN-LAST:event_tfCadenaCodigoFocusLost
 
     private void tfComision1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfComision1FocusLost
@@ -1856,10 +1917,10 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     private javax.swing.JButton btnBuscarProductoCodBar;
     private javax.swing.JButton btnBuscarProductoId;
     private javax.swing.JButton btnBuscarProductoMaestro;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton btnMasCodigos;
+    public static javax.swing.JButton btnEliminar;
+    public static javax.swing.JButton btnGuardar;
+    public static javax.swing.JButton btnLimpiar;
+    public static javax.swing.JButton btnMasCodigos;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cbAfectaStock;
@@ -1968,9 +2029,24 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     //Estado inicial = true (Los campos estan deshabilitados)
     //Estado inicial = false (Los campos estan habilitados)
     private void estadoInicial(Boolean b) {
+        tfCodigoProveedor.setText("-");
+        tfCantidadPorCaja.setText("1");
+        tfClasificCodigo.setText("1");
+        tfDescVenta.setText("0");
+        tfDescCompra.setText("0");
+        tfPesoProducto.setText("0");
+        tfStockMinimo.setText("0");
+        tfStockMaximo.setText("0");
+        tfLucroUnidad.setText("0");
+        tfLucroCaja.setText("0");
+        tfComision1.setText("0");
+        tfComision2.setText("0");
+        tfComision3.setText("0");
+        tfBalanzaSector.setText("GENERAL");
+        tfBalanzaTecla.setText("0");
         btnNuevo.setEnabled(b);
-        btnEliminar.setEnabled(b);
         btnMasCodigos.setEnabled(!b);
+        btnEliminar.setEnabled(b);
         btnGuardar.setEnabled(!b);
         btnLimpiar.setEnabled(!b);
     }
@@ -1980,18 +2056,88 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         estadoInicial(false);
         recuperarUltimoID();
         jLabel28.setText("INSERTAR");
+        btnMasCodigos.setEnabled(false);
     }
 
     private void modificar() {
         accion = "MODIFICAR";
         jLabel28.setText("MODIFICAR");
         estadoInicial(false);
+        btnMasCodigos.setEnabled(true);
     }
 
     private void cancelar() {
         tfCodigoBarras.requestFocus();
         estadoInicial(true);
         vaciarCampos();
+    }
+
+    private boolean validar() {
+        boolean validar = false;
+        if (tfCodigoBarras.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfCodigoBarras.requestFocus();
+        } else if (tfIdProducto.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfIdProducto.requestFocus();
+        } else if (tfMaestroProducto.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfMaestroProducto.requestFocus();
+        } else if (tfCodigoProveedor.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfCodigoProveedor.requestFocus();
+        } else if (tfDescripcion1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfDescripcion1.requestFocus();
+        } else if (tfDescripcion2.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfDescripcion1.requestFocus();
+        } else if (tfCantidadPorCaja.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfCantidadPorCaja.requestFocus();
+        } else if (tfClasificCodigo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfClasificCodigo.requestFocus();
+        } else if (tfDescVenta.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfDescVenta.requestFocus();
+        } else if (tfDescCompra.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfDescCompra.requestFocus();
+        } else if (tfPesoProducto.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfPesoProducto.requestFocus();
+        } else if (tfStockMinimo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfStockMinimo.requestFocus();
+        } else if (tfStockMaximo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfStockMaximo.requestFocus();
+        } else if (tfLucroUnidad.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfLucroUnidad.requestFocus();
+        } else if (tfLucroCaja.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfLucroCaja.requestFocus();
+        } else if (tfComision1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfComision1.requestFocus();
+        } else if (tfComision2.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfComision2.requestFocus();
+        } else if (tfComision3.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfComision3.requestFocus();
+        } else if (tfBalanzaSector.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfBalanzaSector.requestFocus();
+        } else if (tfBalanzaTecla.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este campo no puede estar vacio... \nPor favor ingrese el dato correspondiente");
+            tfBalanzaTecla.requestFocus();
+        } else {
+            validar = true;
+        }
+        return validar;
     }
 
     private void guardar() {
@@ -2182,8 +2328,8 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         tfInformeLucroCaja.setText("");
         tfInformeLucroUnit.setText("");
         tfInformePrecioOffLine.setText("");
-        tfInformePrecioVtaCaja.setText("");
         tfInformePrecioVtaUnit.setText("");
+        tfInformePrecioVtaCaja.setText("");
         tfInformeStock.setText("");
         tfInformeUltimaCompra.setText("");
         tfLucroCaja.setText("");
@@ -2193,6 +2339,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         tfStockMaximo.setText("");
         tfStockMinimo.setText("");
         cbAfectaStock.setSelectedIndex(0);
+        cbAfectaStock.setEnabled(true);
         cbBalanzaPesableSN.setSelectedIndex(0);
         cbImprimeFleje.setSelectedIndex(0);
         cbImpuesto.setSelectedIndex(0);
@@ -2208,6 +2355,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
             recuperarStockPorId(id);
             tfCodigoBarras.setText(producto.getCodbarra());
             tfMaestroProducto.setText(producto.getMaestro() + "");
+            tfCodigoProveedor.setText(producto.getCodproveedor());
             tfDescripcion1.setText(producto.getDescripcion1());
             tfDescripcion2.setText(producto.getDescripcion2());
             cbUnidadMedida.setSelectedIndex(producto.getUnidad());
@@ -2262,7 +2410,7 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
             tfInformeLucroCaja.setText(Utilidad.formatoValorS(lucroC));
 
         } else {
-            JOptionPane.showMessageDialog(null, "Este producto no existe", "Atencion", 2);
+            nuevo();
             recuperarUltimoID();
         }
     }
@@ -2270,21 +2418,28 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
     private void recuperarStockPorId(Long id) {
         stockDao = new MovimientoStockDao();
         stock = stockDao.recuperarPorIdProducto(id);
-        tfInformeStock.setText(Utilidad.formatoValorS(stock.getSaldo()));
+        if (stock == null) {
+            tfInformeStock.setText("0");
+        } else {
+            tfInformeStock.setText(Utilidad.formatoValorS(stock.getSaldo()));
+
+        }
     }
 
     //Metodos abstractos
     @Override
     public void setProducto(Dproductos producto) {
         this.producto = producto;
-        tfCodigoBarras.setText(producto.getCodbarra());
-        tfIdProducto.setText(producto.getId() + "");
-    }
-
-    @Override
-    public void setMaestro(Dproductos producto) {
-        this.producto = producto;
-        tfMaestroProducto.setText(producto.getId() + "");
+        if (bandera == 0) {
+            tfCodigoBarras.setText(producto.getCodbarra());
+            tfIdProducto.setText(producto.getId() + "");
+            recuperarProducto(Long.parseLong(tfIdProducto.getText()));
+            tfMaestroProducto.requestFocus();
+        }
+        if (bandera == 1) {
+            tfMaestroProducto.setText(producto.getId() + "");
+            tfCodigoProveedor.requestFocus();
+        }
     }
 
     @Override
@@ -2302,23 +2457,19 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         fbp.setVisible(true);
     }
 
-    private void abrirBuscadorMaestro() {
-        FormularioBuscadorMaestro fbp = new FormularioBuscadorMaestro();
-        fbp.setInterfaceBuscadorMaestro(this);
-        fbp.setVisible(true);
-    }
-
     private void abrirBuscadorClasificacion() {
         FormularioClasificacionProductos fcp = new FormularioClasificacionProductos();
         fcp.setInterfaceClasificacion(this);
+        FormularioClasificacionProductos.btnSeleccionar.setEnabled(true);
         fcp.setVisible(true);
     }
 
     private void abrirBuscadorCadenaPrecios() {
         FormularioCadenaPrecios fcdp = new FormularioCadenaPrecios();
+        FormularioCadenaPrecios.btnSeleccionar.setEnabled(true);
         fcdp.setVisible(true);
     }
-    
+
     private void abrirFormularioEntradaInicial() {
         FormularioEntradaInicial entIni = new FormularioEntradaInicial();
         entIni.setVisible(true);
@@ -2337,17 +2488,27 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         id = Long.parseLong(tfClasificCodigo.getText());
         clasDao = new ClasificacionProductosDao();
         clasificacion = clasDao.recuperarPorId(id);
-        tfClasificCodigo.setText(clasificacion.getId() + "");
-        tfClasificDescripcion.setText(clasificacion.getDescripcion());
+        if (clasificacion == null) {
+            JOptionPane.showMessageDialog(null, "No se puede encontrar Clasificacion");
+            tfClasificCodigo.requestFocus();
+        } else {
+            tfClasificCodigo.setText(clasificacion.getId() + "");
+            tfClasificDescripcion.setText(clasificacion.getDescripcion());
+        }
     }
 
-    private void recuperarCadena() {
+    private void recuperarCadena(Long id) {
         if (!tfCadenaCodigo.getText().isEmpty()) {
-            long id = Long.parseLong(tfCadenaCodigo.getText());
+            id = Long.parseLong(tfCadenaCodigo.getText());
             cadDao = new CadenaPreciosDao();
             cadena = cadDao.recuperarPorId(id);
-            tfCadenaCodigo.setText(cadena.getId() + "");
-            tfCadenaDescripcion.setText(cadena.getDescripcion());
+            if (cadena == null) {
+                JOptionPane.showMessageDialog(null, "No se puede encontrar cadena");
+                tfCadenaCodigo.requestFocus();
+            } else {
+                tfCadenaCodigo.setText(cadena.getId() + "");
+                tfCadenaDescripcion.setText(cadena.getDescripcion());
+            }
         }
     }
 
@@ -2358,8 +2519,115 @@ public class FormularioProductos extends javax.swing.JDialog implements Interfac
         tfMaestroProducto.setText(id + "");
     }
 
-    private void generarCodigoBarra() {
-        tfCodigoBarras.setText("123456" + tfIdProducto.getText());
+    //Metodo para genera el codigo de barras
+    private void generateEan8(String code) {
+        String code2 = "";
+        if (code.length() == 1) {
+            code2 = "000000" + code;
+        }
+        if (code.length() == 2) {
+            code2 = "00000" + code;
+        }
+        if (code.length() == 3) {
+            code2 = "0000" + code;
+        }
+        if (code.length() == 4) {
+            code2 = "000" + code;
+        }
+        if (code.length() == 5) {
+            code2 = "00" + code;
+        }
+        if (code.length() == 6) {
+            code2 = "0" + code;
+        }
+        if (code.length() == 7) {
+            code2 = code;
+        }
+
+        int[] barcode = new int[code2.length()];
+        for (int i = 0; i < code2.length(); i++) {
+            barcode[i] = code2.charAt(i) - '0';
+        }
+        int sum1 = (barcode[1] + barcode[3] + barcode[5]);
+        int sum2 = 3 * (barcode[0] + barcode[2] + barcode[4] + barcode[6]);
+        int check = sum1 + sum2;
+        int digito = 10 - (check % 10);
+        if (digito == 10) {
+            digito = 0;
+        }
+        tfCodigoBarras.setText(code2 + String.valueOf(digito));
     }
 
+    private void verificarMaestro() {
+        //Si el campo Maestro esta vacio copia el id y lo setea, habilita el
+        //combobox afectaStock y seleciona "SI".
+        if (tfMaestroProducto.getText().isEmpty()) {
+            tfMaestroProducto.setText(tfIdProducto.getText());
+            cbAfectaStock.setSelectedIndex(0);
+            cbAfectaStock.setEnabled(true);
+        } else {
+            //Si no esta vacio habilita de nuevo el comboBox en el caso que este
+            //deshabilitado y selecciona "SI"
+            cbAfectaStock.setSelectedIndex(0);
+            cbAfectaStock.setEnabled(true);
+            //Verifica que el id y el maestro sean iguales.
+            if (!tfMaestroProducto.getText().equals(tfIdProducto.getText())) {
+                //Si son diferentes, pregunta si se quiere continuar con esos datos.
+                //Si la respuesta es SI, mantiene el Maestro y deshabilita el combobox
+                //afectaStock y selecciona "NO".
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "El identificador y el maestro no son iguales, desea continuar",
+                        "Atención", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.OK_OPTION) {
+                    cbAfectaStock.setSelectedIndex(1);
+                    cbAfectaStock.setEnabled(false);
+                    //Si la respuesta es "NO", copia el valor del campo idProducto y lo setea 
+                    //en el campo maestroProducto y vuele a habilitar el comboBox
+                } else {
+                    tfMaestroProducto.setText(tfIdProducto.getText());
+                    cbAfectaStock.setSelectedIndex(0);
+                    cbAfectaStock.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    //Metodo para establecer el orden que gana el foco al presionar TAB/SHIFT+TAB
+    public static class MyOFocusTraversalPolicy
+            extends FocusTraversalPolicy {
+
+        Vector<Component> order;
+
+        public MyOFocusTraversalPolicy(Vector<Component> order) {
+            this.order = new Vector<Component>(order.size());
+            this.order.addAll(order);
+        }
+
+        public Component getComponentAfter(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = (order.indexOf(aComponent) + 1) % order.size();
+            return order.get(idx);
+        }
+
+        public Component getComponentBefore(Container focusCycleRoot,
+                Component aComponent) {
+            int idx = order.indexOf(aComponent) - 1;
+//            if (idx &lt; 0) {
+//                idx = order.size() - 1;
+//            }
+            return order.get(idx);
+        }
+
+        public Component getDefaultComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+
+        public Component getLastComponent(Container focusCycleRoot) {
+            return order.lastElement();
+        }
+
+        public Component getFirstComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+    }
 }

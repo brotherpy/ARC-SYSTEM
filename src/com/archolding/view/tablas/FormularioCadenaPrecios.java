@@ -35,6 +35,7 @@ public class FormularioCadenaPrecios extends javax.swing.JDialog {
         TableColumnModel columnModel = tabla.getColumnModel();
         columnModel.getColumn(1).setPreferredWidth(400);
         recuperarTodo();
+        Utilidad.salirConEscapeBuscador(this);
 
         //solo mayusculas
         tfDescripcion.setDocument(new Utilidad());
@@ -63,6 +64,7 @@ public class FormularioCadenaPrecios extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadenas de precio");
+        setModal(true);
 
         tabla.setModel(mtDcadena);
         tabla.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,6 +112,7 @@ public class FormularioCadenaPrecios extends javax.swing.JDialog {
         });
 
         btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.setEnabled(false);
         btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSeleccionarActionPerformed(evt);
@@ -188,7 +191,7 @@ public class FormularioCadenaPrecios extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-        seleccionarProducto(WIDTH);
+        seleccionarProducto(tabla.getSelectedRow());
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
@@ -207,7 +210,7 @@ public class FormularioCadenaPrecios extends javax.swing.JDialog {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnSeleccionar;
+    public static javax.swing.JButton btnSeleccionar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;

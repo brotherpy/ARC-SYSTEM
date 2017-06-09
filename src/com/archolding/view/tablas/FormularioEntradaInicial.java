@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author jorge
+ * @author Jorge Fabio
  */
 public class FormularioEntradaInicial extends javax.swing.JDialog {
 
@@ -36,6 +36,15 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
         setLocationRelativeTo(this);
 
         cargarUltimoProductoCatastrado();
+        
+        Utilidad.salirConEscapeJDialog(this);
+        
+        //Validar campos a solo numeros
+        Utilidad.soloNumeros(tfStockCantidad);
+        Utilidad.soloNumeros(tfProductoPrecioUnit);
+        Utilidad.soloNumeros(tfProductoPrecioCaja);
+        Utilidad.soloNumeros(tfProductoPorcentajeUnidad);
+        Utilidad.soloNumeros(tfProductoCosto);
 
     }
 
@@ -85,8 +94,10 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
         jLabel6.setText("Costo inicial");
 
         tfProdId.setEditable(false);
+        tfProdId.setFocusable(false);
 
         tfProdDescripcion.setEditable(false);
+        tfProdDescripcion.setFocusable(false);
 
         tfStockCantidad.setEditable(false);
         tfStockCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -134,6 +145,9 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
         tfProductoPorcentajeUnidad.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tfProductoPorcentajeUnidadFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfProductoPorcentajeUnidadFocusLost(evt);
             }
         });
         tfProductoPorcentajeUnidad.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -264,59 +278,64 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfStockCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfStockCantidadKeyPressed
-        // TODO add your handling code here:
+        Utilidad.moverConEnter(evt, tfProductoPrecioUnit);
     }//GEN-LAST:event_tfStockCantidadKeyPressed
 
     private void tfProductoPrecioUnitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProductoPrecioUnitKeyPressed
-        // TODO add your handling code here:
+        Utilidad.moverConEnter(evt, tfProductoPrecioCaja);
     }//GEN-LAST:event_tfProductoPrecioUnitKeyPressed
 
     private void tfProductoPrecioCajaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProductoPrecioCajaKeyPressed
-        // TODO add your handling code here:
+        Utilidad.moverConEnter(evt, tfProductoPorcentajeUnidad);
     }//GEN-LAST:event_tfProductoPrecioCajaKeyPressed
 
     private void tfProductoPorcentajeUnidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProductoPorcentajeUnidadKeyPressed
-        // TODO add your handling code here:
+        Utilidad.moverConEnter(evt, tfProductoCosto);
     }//GEN-LAST:event_tfProductoPorcentajeUnidadKeyPressed
 
     private void tfProductoCostoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfProductoCostoKeyPressed
-        // TODO add your handling code here:
+        Utilidad.moverConEnter(evt, btnAceptar);
     }//GEN-LAST:event_tfProductoCostoKeyPressed
 
     private void tfStockCantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfStockCantidadFocusGained
-        // TODO add your handling code here:
+        tfStockCantidad.selectAll();
     }//GEN-LAST:event_tfStockCantidadFocusGained
 
     private void tfProductoPrecioUnitFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPrecioUnitFocusGained
-        // TODO add your handling code here:
+        tfProductoPrecioUnit.selectAll();
     }//GEN-LAST:event_tfProductoPrecioUnitFocusGained
 
     private void tfProductoPrecioCajaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPrecioCajaFocusGained
-        // TODO add your handling code here:
+        tfProductoPrecioCaja.selectAll();
     }//GEN-LAST:event_tfProductoPrecioCajaFocusGained
 
     private void tfProductoPorcentajeUnidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPorcentajeUnidadFocusGained
-        // TODO add your handling code here:
+        tfProductoPorcentajeUnidad.selectAll();
     }//GEN-LAST:event_tfProductoPorcentajeUnidadFocusGained
 
     private void tfProductoCostoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoCostoFocusGained
-        // TODO add your handling code here:
+        tfProductoCosto.selectAll();
     }//GEN-LAST:event_tfProductoCostoFocusGained
 
     private void btnAceptarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAceptarKeyPressed
-        // TODO add your handling code here:
+        Utilidad.hacerClicConEnter(evt, btnAceptar);
     }//GEN-LAST:event_btnAceptarKeyPressed
 
     private void btnSalirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSalirKeyPressed
-        // TODO add your handling code here:
+        Utilidad.hacerClicConEnter(evt, btnSalir);
+
     }//GEN-LAST:event_btnSalirKeyPressed
 
     private void tfProductoPrecioUnitFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPrecioUnitFocusLost
-        // TODO add your handling code here:
+        precioPorCaja();
+        double valor = Utilidad.formatoValorD(tfProductoPrecioUnit.getText());
+        tfProductoPrecioUnit.setText(Utilidad.formatoValorS(valor));
     }//GEN-LAST:event_tfProductoPrecioUnitFocusLost
 
     private void tfProductoPrecioCajaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPrecioCajaFocusLost
-        // TODO add your handling code here:
+        costoUnitario();
+        double valor = Utilidad.formatoValorD(tfProductoPrecioCaja.getText());
+        tfProductoPrecioCaja.setText(Utilidad.formatoValorS(valor));
     }//GEN-LAST:event_tfProductoPrecioCajaFocusLost
 
     private void tfProductoCostoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoCostoFocusLost
@@ -328,8 +347,12 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        dispose();
+        salir();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void tfProductoPorcentajeUnidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfProductoPorcentajeUnidadFocusLost
+        costoUnitario();
+    }//GEN-LAST:event_tfProductoPorcentajeUnidadFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -354,21 +377,24 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
 
         prodDao = new ProductosDao();
         Long id = prodDao.recuperarUltimoID();
-        
+
         prodDao = new ProductosDao();
         producto = prodDao.recuperarPorId(id);
-        
+
         boolean validador = false;
-        
+
         if (producto.isAfectastock()) {
             tfStockCantidad.setEditable(true);
-            tfStockCantidad.setText("");
+            tfStockCantidad.setText("0");
             tfStockCantidad.requestFocus();
         }
-        
+
         tfProdId.setText(producto.getId() + "");
         tfProdDescripcion.setText(producto.getCodbarra() + " - " + producto.getDescripcion1());
         tfProductoPorcentajeUnidad.setText(Utilidad.formatoValorS(producto.getLucro()));
+        tfProductoPrecioUnit.setText("0");
+        tfProductoPrecioCaja.setText("0");
+        tfProductoCosto.setText("0");
     }
 
     private void afectarStock() {
@@ -394,7 +420,15 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Se produjo un error al cargar stock inicial");
         }
 
-        if (!"0".equals(tfStockCantidad.getText())) {
+        tfProductoPrecioUnit.requestFocus();
+
+        prodDao = new ProductosDao();
+        Long id = prodDao.recuperarUltimoID();
+
+        prodDao = new ProductosDao();
+        producto = prodDao.recuperarPorId(id);
+
+        if (producto.isAfectastock()) {
             prodDao = new ProductosDao();
             producto = prodDao.recuperarPorId(Long.parseLong(tfProdId.getText()));
             producto.setUcant(Utilidad.formatoValorD(tfStockCantidad.getText()));
@@ -424,6 +458,32 @@ public class FormularioEntradaInicial extends javax.swing.JDialog {
             }
         }
         dispose();
+    }
+
+    private void salir() {
+        int opcion = JOptionPane.showConfirmDialog(null, "Desea salir?", "Atencion", JOptionPane.OK_CANCEL_OPTION);
+        if (opcion == JOptionPane.OK_OPTION) {
+            dispose();
+        }
+    }
+
+    private void precioPorCaja() {
+        prodDao = new ProductosDao();
+        producto = prodDao.recuperarPorId(Long.parseLong(tfProdId.getText()));
+        int cantCaja = producto.getCantidad();
+
+        tfProductoPrecioCaja.setText(
+                Integer.parseInt(tfProductoPrecioUnit.getText()) * cantCaja + ""
+        );
+
+    }
+
+    private void costoUnitario() {
+        double precioVta = Utilidad.formatoValorD(tfProductoPrecioUnit.getText());
+        double porcentage = Utilidad.formatoValorD(tfProductoPorcentajeUnidad.getText());
+        double costo = precioVta - (precioVta * porcentage / 100);
+        tfProductoCosto.setText(Utilidad.formatoValorS(costo));
+
     }
 
 }

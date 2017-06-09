@@ -39,7 +39,7 @@ public class Mstock implements Serializable {
     @JoinColumn(name = "iddeposito", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Ddepositos iddeposito;
-    @JoinColumn(name = "idproducto", referencedColumnName = "id")
+    @JoinColumn(name = "idproducto", referencedColumnName = "id", unique = true)
     @ManyToOne(optional = false)
     private Dproductos idproducto;
 
@@ -57,6 +57,14 @@ public class Mstock implements Serializable {
     }
 
     public Mstock(Date fecha, double saldo, Ddepositos iddeposito, Dproductos idproducto) {
+        this.fecha = fecha;
+        this.saldo = saldo;
+        this.iddeposito = iddeposito;
+        this.idproducto = idproducto;
+    }
+
+    public Mstock(Long id, Date fecha, double saldo, Ddepositos iddeposito, Dproductos idproducto) {
+        this.id = id;
         this.fecha = fecha;
         this.saldo = saldo;
         this.iddeposito = iddeposito;
